@@ -10,7 +10,7 @@ const verifyToken=async(req,res,next)=>{
                 return res.status(400).json({message:"Invalid token"})
             }
             else{
-                console.log(user)
+                console.log(decoded)
                 req.user=decoded
             }
         })
