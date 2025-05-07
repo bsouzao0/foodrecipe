@@ -1,7 +1,7 @@
 {
   "homepage": "https://bsouzao0.github.io/foodrecipe",
   "name": "frontend",
-  "private": false,
+  "public":true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
