@@ -13,16 +13,11 @@ connectDb();
 // Middleware setup
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'frontend', 'build')));  // Adjusted to serve build folder (Vite or React)
+app.use(express.static("public")); 
 
 // API Routes
 app.use("/", require("./routes/user"));
 app.use("/recipe", require("./routes/recipe"));
-
-// Serve static files for your frontend (React/Vite app)
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));  // Adjust this path to where your build folder is
-});
 
 // Start the server
 app.listen(PORT, (err) => {
