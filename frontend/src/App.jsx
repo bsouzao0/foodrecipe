@@ -11,7 +11,7 @@ import RecipeDetails from './pages/RecipeDetails'
 
 const getAllRecipes=async()=>{
   let allRecipes=[]
-  await axios.get('https://foodrecipe-8brr.onrender.com/recipe').then(res=>{
+  await axios.get(`${import.meta.env.VITE_API_URL}/recipe`).then(res=>{
     allRecipes=res.data
   })
   return allRecipes
@@ -29,10 +29,10 @@ const getFavRecipes=()=>{
 
 const getRecipe=async({params})=>{
   let recipe;
-  await axios.get(`https://foodrecipe-8brr.onrender.com/recipe/${params.id}`)
+  await axios.get(`${import.meta.env.VITE_API_URL}/recipe`${params.id})
   .then(res=>recipe=res.data)
 
-  await axios.get(`https://foodrecipe-8brr.onrender.com/user/${recipe.createdBy}`)
+  await axios.get(`${import.meta.env.VITE_API_URL}/user/`${recipe.createdBy})
   .then(res=>{
     recipe={...recipe,email:res.data.email}
   })
