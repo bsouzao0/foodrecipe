@@ -29,7 +29,7 @@ const getFavRecipes=()=>{
 
 const getRecipe=async({params})=>{
   let recipe;
-  await axios.get(`${import.meta.env.VITE_API_URL}/recipe${params.id}`)
+  await axios.get(`${import.meta.env.VITE_API_URL}/recipe/${params.id}`)
   .then(res=>recipe=res.data)
 
   await axios.get(`${import.meta.env.VITE_API_URL}/user/${recipe.createdBy}`)
