@@ -30,7 +30,7 @@ export default function EditRecipe() {
     const onHandleSubmit = async (e) => {
         e.preventDefault()
         console.log(recipeData)
-        await axios.put(`http://localhost:5000/recipe/${id}`, recipeData,{
+        await axios.put(`https://foodrecipe-8brr.onrender.com/recipe/${id}`, recipeData,{
             headers:{
                 'Content-Type':'multipart/form-data',
                 'authorization':'bearer '+localStorage.getItem("token")
