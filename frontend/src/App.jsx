@@ -9,20 +9,32 @@ import EditRecipe from './pages/EditRecipe'
 import RecipeDetails from './pages/RecipeDetails'
 
 
-const getAllRecipes=async()=>{
-  let allRecipes=[]
-  await axios.get(`${import.meta.env.VITE_API_URL}/recipe`)
-    .then(res=>{
-    allRecipes=res.data
-  })
-  return allRecipes
+const getAllRecipes = async () => {
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/recipe`)
+    return Array.isArray(res.data) ? res.data : []
+  } catch (err) {
+    console.error('Error fetching recipes:', err)
+    return []
+  }
 }
 
-const getMyRecipes=async()=>{
-  let user=JSON.parse(localStorage.getItem("user"))
-  let allRecipes=await getAllRecipes()
-  return allRecipes.filter(item=>item.createdBy===user._id)
+const getMyRecipes = async () => {
+  const user = JSON.parse(localStorage.getItem("user"))
+  if (!user || !user._id) {
+    console.warn("No valid user in localStorage")
+    return []
+  }
+
+  const allRecipes = await getAllRecipes()
+  if (!Array.isArray(allRecipes)) {
+    console.warn("Expected allRecipes to be an array but got:", allRecipes)
+    return []
+  }
+
+  return allRecipes.filter(item => item.createdBy === user._id)
 }
+
 
 const getFavRecipes=()=>{
   return JSON.parse(localStorage.getItem("fav"))
