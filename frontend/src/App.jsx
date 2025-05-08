@@ -1,13 +1,12 @@
 import React from 'react'
 import './App.css'
-import {createBrowserRouter,RouterProvider} from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Home from './pages/Home'
 import MainNavigation from './components/MainNavigation'
 import axios from 'axios'
-import AddFoodRecipe  from './pages/AddFoodRecipe'
+import AddFoodRecipe from './pages/AddFoodRecipe'
 import EditRecipe from './pages/EditRecipe'
 import RecipeDetails from './pages/RecipeDetails'
-
 
 const getAllRecipes = async () => {
   try {
@@ -26,49 +25,49 @@ const getMyRecipes = async () => {
     return []
   }
 
-  const allRecipes = await getAllRecipes()
-  if (!Array.isArray(allRecipes)) {
-    console.warn("Expected allRecipes to be an array but got:", allRecipes)
+  try {
+    const allRecipes = await getAllRecipes()
+    return allRecipes.filter(recipe => recipe.createdBy === user._id)
+  } catch (err) {
+    console.error("Error fetching user's recipes:", err)
     return []
   }
-
-  return allRecipes.filter(item => item.createdBy === user._id)
 }
 
-
-const getFavRecipes=()=>{
-  return JSON.parse(localStorage.getItem("fav"))
+const getFavRecipes = () => {
+  const favItems = JSON.parse(localStorage.getItem("fav"))
+  return Array.isArray(favItems) ? favItems : []
 }
 
-const getRecipe=async({params})=>{
-  let recipe;
-  await axios.get(`${import.meta.env.VITE_API_URL}/recipe/${params.id}`)
-  .then(res=>recipe=res.data)
-
-  await axios.get(`${import.meta.env.VITE_API_URL}/user/${recipe.createdBy}`)
-  .then(res=>{
-    recipe={...recipe,email:res.data.email}
-  })
-
-  return recipe
+const getRecipe = async ({ params }) => {
+  try {
+    let recipe = await axios.get(`${import.meta.env.VITE_API_URL}/recipe/${params.id}`)
+    const userResponse = await axios.get(`${import.meta.env.VITE_API_URL}/user/${recipe.data.createdBy}`)
+    recipe = { ...recipe.data, email: userResponse.data.email }
+    return recipe
+  } catch (err) {
+    console.error('Error fetching recipe details:', err)
+    return null
+  }
 }
 
-const router=createBrowserRouter([
-  {path:"/",element:<MainNavigation/>,children:[
-    {path:"/",element:<Home/>,loader:getAllRecipes},
-    {path:"/myRecipe",element:<Home/>,loader:getMyRecipes},
-    {path:"/favRecipe",element:<Home/>,loader:getFavRecipes},
-    {path:"/addRecipe",element:<AddFoodRecipe/>},
-    {path:"/editRecipe/:id",element:<EditRecipe/>},
-    {path:"/recipe/:id",element:<RecipeDetails/>,loader:getRecipe}
-  ]}
- 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainNavigation />,
+    children: [
+      { path: "/", element: <Home />, loader: getAllRecipes },
+      { path: "/myRecipe", element: <Home />, loader: getMyRecipes },
+      { path: "/favRecipe", element: <Home />, loader: getFavRecipes },
+      { path: "/addRecipe", element: <AddFoodRecipe /> },
+      { path: "/editRecipe/:id", element: <EditRecipe /> },
+      { path: "/recipe/:id", element: <RecipeDetails />, loader: getRecipe }
+    ]
+  }
 ])
 
 export default function App() {
   return (
-   <>
-   <RouterProvider router={router}></RouterProvider>
-   </>
+    <RouterProvider router={router} />
   )
 }

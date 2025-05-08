@@ -56,10 +56,7 @@ export default function RecipeItems() {
                         <div className='icons'>
                             <div className='timer'><BsStopwatchFill /> {item.time}</div>
                             {!path ? (
-                                <FaHeart
-                                    onClick={() => favRecipe(item)}
-                                    style={{ color: favItems.some(res => res._id === item._id) ? "red" : "" }}
-                                />
+                                <FaHeart onClick={() => favRecipe(item)} style={{ color: favItems.some(res => res._id === item._id) ? "red" : "" }}/>
                             ) : (
                                 <div className='action'>
                                     <Link to={`/editRecipe/${item._id}`} className="editIcon"><FaEdit /></Link>
