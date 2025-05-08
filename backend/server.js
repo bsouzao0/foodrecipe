@@ -8,7 +8,9 @@ const PORT=process.env.PORT || 3000
 connectDb()
 
 app.use(express.json())
-app.use(cors()) //for cross origin resource sharing
+app.use(cors({origin: 'https://foodrecipe-fronted.onrender.com',
+  credentials: true}
+)) //for cross origin resource sharing
 app.use(express.static("public")) //for images
 
 app.use("/",require("./routes/user"))

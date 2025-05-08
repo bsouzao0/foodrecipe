@@ -9,10 +9,10 @@ import EditRecipe from './pages/EditRecipe'
 import RecipeDetails from './pages/RecipeDetails'
 
 
-
 const getAllRecipes=async()=>{
   let allRecipes=[]
-  await axios.get(`${import.meta.env.VITE_API_URL}/recipe`).then(res=>{
+  await axios.get(`${import.meta.env.VITE_API_URL}/recipe`)
+    .then(res=>{
     allRecipes=res.data
   })
   return allRecipes
