@@ -10,7 +10,7 @@ import RecipeDetails from './pages/RecipeDetails'
 
 const getAllRecipes = async () => {
   try {
-    const res = await axios.get(`https://foodrecipe-8brr.onrender.co/recipe`)
+    const res = await axios.get(`https://foodrecipe-8brr.onrender.com/recipe`)
     return Array.isArray(res.data) ? res.data : []
   } catch (err) {
     console.error('Error fetching recipes:', err)
