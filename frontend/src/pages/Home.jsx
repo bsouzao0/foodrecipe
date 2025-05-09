@@ -26,7 +26,7 @@ export default function Home() {
         <div className="left">
           <h1>WEB215</h1>
           <h5>
-            It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+            Looking for a place to store your favorite recipes? You are in the right place!!
           </h5>
           <button onClick={addRecipe} aria-label="Share your recipe">Share your recipe</button>
         </div>

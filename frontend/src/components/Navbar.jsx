@@ -28,11 +28,11 @@ export default function Navbar() {
   return (
     <>
         <header>
-            <h2>Food Blog</h2>
+            <h2>Food Recipes</h2>
             <ul>
                 <li><NavLink to="/">Home</NavLink></li>
                 <li onClick={()=>isLogin && setIsOpen(true)}><NavLink to={ !isLogin ? "/myRecipe" : "/"}>My Recipe</NavLink></li>
-                <li onClick={()=>isLogin && setIsOpen(true)}><NavLink to={ !isLogin ? "/favRecipe" : "/"}>Favourites</NavLink></li>
+                <li onClick={()=>isLogin && setIsOpen(true)}><NavLink to={ !isLogin ? "/favRecipe" : "/"}>Favorites</NavLink></li>
                 <li onClick={checkLogin}><p className='login'>{ (isLogin)? "Login": "Logout" }{user?.email ? `(${user?.email})` : ""}</p></li>
             </ul>
         </header>
