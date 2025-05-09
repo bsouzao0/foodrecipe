@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function AddFoodRecipe() {
@@ -46,8 +46,8 @@ export default function AddFoodRecipe() {
   formData.append('title', recipeData.title);
 
   recipeData.ingredients.forEach((ingredient) => {
-    formData.append('ingredients', ingredient);
-  });
+  formData.append('ingredients[]', ingredient); // Use array notation
+});
 
   formData.append('instructions', recipeData.instructions);
   formData.append('time', recipeData.time);
@@ -71,7 +71,6 @@ export default function AddFoodRecipe() {
     setError("Error uploading recipe: " + err.message);
   }
 };
-
 
   return (
     <div className="container">
