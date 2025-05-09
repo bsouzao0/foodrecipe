@@ -58,10 +58,10 @@ export default function AddFoodRecipe() {
 
   try {
     await axios.post("https://foodrecipe-8brr.onrender.com/recipe", formData, {
-      headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-      },
-    });
+  headers: {
+    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+  },
+});
 
     setSuccess(true);
     setTimeout(() => {
