@@ -52,7 +52,7 @@ export default function AddFoodRecipe() {
   formData.append('instructions', recipeData.instructions);
   formData.append('time', recipeData.time);
 
-  if (recipeData.file) {
+  if (recipeData.file){
     formData.append('file', recipeData.file);
   }
 
