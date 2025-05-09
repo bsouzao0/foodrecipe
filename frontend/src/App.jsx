@@ -10,7 +10,7 @@ import RecipeDetails from './pages/RecipeDetails'
 
 const getAllRecipes = async () => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/recipe`)
+    const res = await axios.get(`https://foodrecipe-8brr.onrender.co/recipe`)
     return Array.isArray(res.data) ? res.data : []
   } catch (err) {
     console.error('Error fetching recipes:', err)
@@ -41,8 +41,8 @@ const getFavRecipes = () => {
 
 const getRecipe = async ({ params }) => {
   try {
-    let recipe = await axios.get(`${import.meta.env.VITE_API_URL}/recipe/${params.id}`)
-    const userResponse = await axios.get(`${import.meta.env.VITE_API_URL}/user/${recipe.data.createdBy}`)
+    let recipe = await axios.get(`https://foodrecipe-8brr.onrender.co/recipe/${params.id}`)
+    const userResponse = await axios.get(`https://foodrecipe-8brr.onrender.co/user/${recipe.data.createdBy}`)
     recipe = { ...recipe.data, email: userResponse.data.email }
     return recipe
   } catch (err) {
