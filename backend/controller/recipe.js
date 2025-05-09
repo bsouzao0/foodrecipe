@@ -52,26 +52,34 @@ const getRecipe = async (req, res) => {
 };
 
 const addRecipe = async (req, res) => {
-  const { title, ingredients, instructions, time } = req.body;
-
-  if (!title || !ingredients || !instructions || !time) {
-    return res.status(400).json({ message: "Required fields can't be empty" });
-  }
-
   try {
+    let { title, ingredients, instructions, time } = req.body;
+
+    if (!title || !ingredients || !instructions || !time) {
+      return res.status(400).json({ message: "Required fields can't be empty" });
+    }
+
+    if (typeof ingredients === 'string') {
+      ingredients = ingredients.includes(',')
+        ? ingredients.split(',').map(i => i.trim())
+        : [ingredients];
+    }
+
     const newRecipe = await Recipes.create({
       title,
       ingredients,
       instructions,
       time,
-      coverImage: req.file ? req.file.filename : undefined, 
-      createdBy: req.user.id,  
+      coverImage: req.file ? req.file.filename : undefined,
+      createdBy: req.user.id,
     });
+
     return res.json(newRecipe);
   } catch (err) {
-    return res.status(500).json({ message: "Error creating recipe", error: err });
+    return res.status(500).json({ message: "Error creating recipe", error: err.message });
   }
 };
+
 
 const editRecipe = async (req, res) => {
   const { title, ingredients, instructions, time } = req.body;
