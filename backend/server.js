@@ -52,7 +52,17 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.static("public")) //for images
+app.use('/images', cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}), express.static(path.join(__dirname, 'public', 'images')));
+
 
 app.use("/",require("./routes/user"))
 app.use("/recipe",require("./routes/recipe"))
