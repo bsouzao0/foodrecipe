@@ -1,45 +1,58 @@
-const express = require("express");
-const dotenv = require("dotenv").config();
-const connectDb = require("./config/connectionDb");
-const cors = require("cors");
-const fs = require('fs');  // Require the fs module
-const path = require('path');  // Require the path module
+const express=require("express")
+const app=express()
+const dotenv=require("dotenv").config()
+const connectDb=require("./config/connectionDb")
+const cors=require("cors")
 
-// Ensure 'public/images' folder exists
+const PORT=process.env.PORT || 5000
+connectDb()
+const allowedOrigins = ["http://localhost:5173", "https://foodrecipe-fronted.onrender.com"];
+
+const fs = require('fs');
+const path = require('path');
+
 const uploadDir = path.join(__dirname, 'public', 'images');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
+const addRecipe = async (req, res) => {
+  const { title, ingredients, instructions, time } = req.body;
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-connectDb();
+  if (!title || !ingredients || !instructions || !time) {
+    return res.status(400).json({ message: "Required fields can't be empty" });
+  }
 
-const allowedOrigins = ["http://localhost:5173", "https://foodrecipe-fronted.onrender.com"];
-app.use(express.json());
+  try {
+    const newRecipe = await Recipes.create({
+      title,
+      ingredients,
+      instructions,
+      time,
+      coverImage: req.file ? req.file.filename : undefined, 
+      createdBy: req.user.id,  
+    });
+    return res.json(newRecipe);
+  } catch (err) {
+    console.error(err);  // Log the error for better debugging
+    return res.status(500).json({ message: "Error creating recipe", error: err });
+  }
+};
+
+app.use(express.json())
 
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+      callback(null, true)
     } else {
-      callback(new Error("CORS Not Allowed"));
+      callback(new Error("CORS Not Allowed"))
     }
   },
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
-app.use(express.static("public")); /
-
-app.use("/", require("./routes/user"));
-app.use("/recipe", require("./routes/recipe"));
-
-app.listen(PORT, (err) => {
-  console.log(`App is listening on port ${PORT}`);
-});
-
-app.use(express.static("public")) 
+app.use(express.static("public")) //for images
 
 app.use("/",require("./routes/user"))
 app.use("/recipe",require("./routes/recipe"))
