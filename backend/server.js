@@ -4,11 +4,11 @@ const dotenv=require("dotenv").config()
 const connectDb=require("./config/connectionDb")
 const cors=require("cors")
 
-const PORT=process.env.PORT || 4000
+const PORT=process.env.PORT || 5000
 connectDb()
-
+const allowedOrigins = ["http://localhost:5173", "https://foodrecipe-fronted.onrender.com"];
 app.use(express.json())
-const allowedOrigins = ["http://localhost:5173", "https://foodrecipe-fronted.onrender.com"]; // update this
+
 
 app.use(cors({
   origin: function (origin, callback) {
