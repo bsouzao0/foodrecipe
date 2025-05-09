@@ -8,7 +8,7 @@ const PORT=process.env.PORT || 4000
 connectDb()
 
 app.use(express.json())
-const allowedOrigins = ["http://localhost:5173", "https://foodrecipe-fronted.onrender.com/"]; // update this
+const allowedOrigins = ["http://localhost:5173", "https://foodrecipe-fronted.onrender.com"]; // update this
 
 app.use(cors({
   origin: function (origin, callback) {
