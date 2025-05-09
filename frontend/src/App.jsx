@@ -41,7 +41,7 @@ const getFavRecipes = () => {
 
 const getRecipe = async ({ params }) => {
   try {
-    let recipe = await axios.get(`https://foodrecipe-8brr.onrender.co/recipe/${params.id}`)
+    let recipe = await axios.get(`https://foodrecipe-8brr.onrender.com/recipe/${params.id}`)
     const userResponse = await axios.get(`https://foodrecipe-8brr.onrender.co/user/${recipe.data.createdBy}`)
     recipe = { ...recipe.data, email: userResponse.data.email }
     return recipe
