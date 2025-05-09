@@ -26,7 +26,9 @@ export default function Home() {
         <div className="left">
           <h1>WEB215</h1>
           <h5>
-            Looking for a place to store your favorite recipes? You are in the right place!!
+            Share your favorite recipes with the world!<br />
+            Join our community of food lovers and discover new flavors.
+            
           </h5>
           <button onClick={addRecipe} aria-label="Share your recipe">Share your recipe</button>
         </div>
