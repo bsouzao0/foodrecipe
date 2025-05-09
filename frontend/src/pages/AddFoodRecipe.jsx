@@ -46,8 +46,8 @@ export default function AddFoodRecipe() {
     formData.append('title', recipeData.title);
 
     recipeData.ingredients.forEach((ingredient) => {
-      formData.append('ingredients[]', ingredient);
-    });
+  formData.append('ingredients', ingredient); 
+  });
 
     formData.append('instructions', recipeData.instructions);
     formData.append('time', recipeData.time);
@@ -100,7 +100,7 @@ export default function AddFoodRecipe() {
           />
         </div>
         <div className="form-control">
-          <label>Ingredients (comma separated)</label>
+          <label>Ingredients: (Separated by comma)</label>
           <textarea
             className="input-textarea"
             name="ingredients"
