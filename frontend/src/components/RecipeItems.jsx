@@ -25,25 +25,28 @@ export default function RecipeItems() {
     }, [recipes]);
 
     const onDelete = async (id) => {
-    const isConfirmed = window.confirm("Are you sure you want to delete this recipe?");
-    
-    if (!isConfirmed) return; 
+    const token = JSON.parse(localStorage.getItem("token")); 
+    if (!token) {
+        console.error("No token found");
+        return; 
+    }
 
     try {
-        
-        const response = await axios.delete(`https://foodrecipe-8brr.onrender.com/recipe/${id}`);
-        console.log("Deleted recipe:", response);
+        await axios.delete(`https://foodrecipe-8brr.onrender.com/recipe/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        });
 
-       
         setAllRecipes(prev => prev.filter(recipe => recipe._id !== id));
 
-        let favItems = JSON.parse(localStorage.getItem("fav")) ?? [];
         const filterItem = favItems.filter(recipe => recipe._id !== id);
         localStorage.setItem("fav", JSON.stringify(filterItem));
     } catch (err) {
         console.error("Error deleting recipe:", err);
     }
 };
+
 
 
     const favRecipe = (item) => {
