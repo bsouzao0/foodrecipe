@@ -1,6 +1,6 @@
-import axios from 'axios'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddFoodRecipe() {
   const [recipeData, setRecipeData] = useState({
@@ -8,103 +8,112 @@ export default function AddFoodRecipe() {
     time: '',
     ingredients: [],
     instructions: '',
-    file: null
-  })
+    file: null,
+  });
 
-  const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const onHandleChange = (e) => {
-    const { name, value, files } = e.target
+    const { name, value, files } = e.target;
     let updatedValue =
       name === "ingredients"
-        ? value.split(",")
+        ? value.split(",").map((ingredient) => ingredient.trim()) 
         : name === "file"
         ? files[0]
-        : value
+        : value;
 
+   
     if (name === "file" && files[0]) {
-      const file = files[0]
-      if (file.size > 5 * 1024 * 1024) { // 5MB size limit
-        setError("File size exceeds 5MB. Please upload a smaller file.")
-        return
+      const file = files[0];
+      if (file.size > 5 * 1024 * 1024) { 
+        setError("File size exceeds 5MB. Please upload a smaller file.");
+        return;
       } else {
-        setError(null)
+        setError(null); 
       }
     }
 
-    setRecipeData(prev => ({ ...prev, [name]: updatedValue }))
-  }
+    setRecipeData((prev) => ({ ...prev, [name]: updatedValue }));
+  };
 
   const onHandleSubmit = async (e) => {
-    e.preventDefault()
-    const formData = new FormData()
+    e.preventDefault();
 
-    for (let key in recipeData) {
-      if (key === "ingredients" && Array.isArray(recipeData[key])) {
-        recipeData[key].forEach(item => formData.append("ingredients", item))
-      } else {
-        formData.append(key, recipeData[key])
-      }
+    const formData = new FormData();
+    formData.append('title', recipeData.title);
+
+    recipeData.ingredients.forEach((ingredient) => {
+      formData.append('ingredients[]', ingredient);
+    });
+
+    formData.append('instructions', recipeData.instructions);
+    formData.append('time', recipeData.time);
+
+    if (recipeData.file) {
+      formData.append('file', recipeData.file);
     }
 
     try {
+      
       await axios.post("https://foodrecipe-8brr.onrender.com/recipe", formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'authorization': 'bearer ' + localStorage.getItem("token")
-        }
-      })
-      setSuccess(true)
+          'authorization': 'bearer ' + localStorage.getItem("token"),
+        },
+      });
+
+      setSuccess(true);
       setTimeout(() => {
-        navigate("/")
-      }, 2000)
+        navigate("/"); 
+      }, 2000);
     } catch (err) {
-      setError("Error uploading recipe: " + err.message)
+      setError("Error uploading recipe: " + err.message); 
     }
-  }
+  };
 
   return (
-    <div className='container'>
-      <form className='form' onSubmit={onHandleSubmit}>
-        <div className='form-control'>
+    <div className="container">
+      <form className="form" onSubmit={onHandleSubmit}>
+        <div className="form-control">
           <label>Title</label>
           <input
             type="text"
-            className='input'
+            className="input"
             name="title"
             value={recipeData.title}
             onChange={onHandleChange}
             required
           />
         </div>
-        <div className='form-control'>
+        <div className="form-control">
           <label>Time</label>
           <input
             type="text"
-            className='input'
+            className="input"
             name="time"
             value={recipeData.time}
             onChange={onHandleChange}
             required
           />
         </div>
-        <div className='form-control'>
-          <label>Ingredients</label>
+        <div className="form-control">
+          <label>Ingredients (comma separated)</label>
           <textarea
-            className='input-textarea'
+            className="input-textarea"
             name="ingredients"
             rows="5"
+            value={recipeData.ingredients.join(", ")} 
             onChange={onHandleChange}
             required
           ></textarea>
         </div>
-        <div className='form-control'>
+        <div className="form-control">
           <label>Instructions</label>
           <textarea
-            className='input-textarea'
+            className="input-textarea"
             name="instructions"
             rows="5"
             value={recipeData.instructions}
@@ -112,11 +121,11 @@ export default function AddFoodRecipe() {
             required
           ></textarea>
         </div>
-        <div className='form-control'>
+        <div className="form-control">
           <label>Recipe Image</label>
           <input
             type="file"
-            className='input'
+            className="input"
             name="file"
             onChange={onHandleChange}
             required
@@ -127,5 +136,5 @@ export default function AddFoodRecipe() {
         <button type="submit">Add Recipe</button>
       </form>
     </div>
-  )
+  );
 }
