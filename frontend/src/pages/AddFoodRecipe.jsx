@@ -40,39 +40,38 @@ export default function AddFoodRecipe() {
   };
 
   const onHandleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('title', recipeData.title);
+  const formData = new FormData();
+  formData.append('title', recipeData.title);
 
-    recipeData.ingredients.forEach((ingredient) => {
-  formData.append('ingredients', ingredient); 
+  recipeData.ingredients.forEach((ingredient) => {
+    formData.append('ingredients', ingredient);
   });
 
-    formData.append('instructions', recipeData.instructions);
-    formData.append('time', recipeData.time);
+  formData.append('instructions', recipeData.instructions);
+  formData.append('time', recipeData.time);
 
-    if (recipeData.file) {
-      formData.append('file', recipeData.file);
-    }
+  if (recipeData.file) {
+    formData.append('file', recipeData.file);
+  }
 
-    try {
-      
-      await axios.post("https://foodrecipe-8brr.onrender.com/recipe", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'authorization': 'bearer ' + localStorage.getItem("token"),
-        },
-      });
+  try {
+    await axios.post("https://foodrecipe-8brr.onrender.com/recipe", formData, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+      },
+    });
 
-      setSuccess(true);
-      setTimeout(() => {
-        navigate("/"); 
-      }, 2000);
-    } catch (err) {
-      setError("Error uploading recipe: " + err.message); 
-    }
-  };
+    setSuccess(true);
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
+  } catch (err) {
+    setError("Error uploading recipe: " + err.message);
+  }
+};
+
 
   return (
     <div className="container">
