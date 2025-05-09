@@ -25,15 +25,26 @@ export default function RecipeItems() {
     }, [recipes]);
 
     const onDelete = async (id) => {
-        try {
-            await axios.delete(`https://foodrecipe-8brr.onrender.com/recipe/${id}`);
-            setAllRecipes(prev => prev.filter(recipe => recipe._id !== id));
-            const filterItem = favItems.filter(recipe => recipe._id !== id);
-            localStorage.setItem("fav", JSON.stringify(filterItem));
-        } catch (err) {
-            console.error("Error deleting recipe:", err);
-        }
-    };
+    const isConfirmed = window.confirm("Are you sure you want to delete this recipe?");
+    
+    if (!isConfirmed) return; 
+
+    try {
+        
+        const response = await axios.delete(`https://foodrecipe-8brr.onrender.com/recipe/${id}`);
+        console.log("Deleted recipe:", response);
+
+       
+        setAllRecipes(prev => prev.filter(recipe => recipe._id !== id));
+
+        let favItems = JSON.parse(localStorage.getItem("fav")) ?? [];
+        const filterItem = favItems.filter(recipe => recipe._id !== id);
+        localStorage.setItem("fav", JSON.stringify(filterItem));
+    } catch (err) {
+        console.error("Error deleting recipe:", err);
+    }
+};
+
 
     const favRecipe = (item) => {
         const exists = favItems.some(recipe => recipe._id === item._id);
@@ -42,7 +53,7 @@ export default function RecipeItems() {
             : [...favItems, item];
 
         localStorage.setItem("fav", JSON.stringify(updatedFavs));
-        setIsFavRecipe(prev => !prev); // triggers re-render
+        setIsFavRecipe(prev => !prev); 
     };
 
     return (
