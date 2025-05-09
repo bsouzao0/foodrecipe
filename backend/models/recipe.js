@@ -19,7 +19,7 @@ const recipeSchema = new mongoose.Schema({
     coverImage:{
         type:String,
     },
-    createBy:{
+    createdBy:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
     }
